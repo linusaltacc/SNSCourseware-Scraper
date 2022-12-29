@@ -40,9 +40,9 @@ OR
 ```python
 python SNSCoursewareScraper.py
 ```
-6. Now Enter college details and subject details as specified integers.
+5. Now Enter college details and subject details as specified integers.
 
-7. The specified subject's lecture notes will we store in the folder SNSCourseware/{Subject_Name}
+6. The specified subject's lecture notes will we store in the folder SNSCourseware/{Subject_Name}
 <!-- CONTRIBUTING -->
 ## Contributing
 
