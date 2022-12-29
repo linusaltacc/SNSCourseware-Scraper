@@ -16,7 +16,7 @@ for a in soup.find_all('a'):
 for n in range(len(clg['name'])):
     print(f'{n}: ',clg['name'][n])
 inp_clg_name = int(input())
-clg_link = clg['links'][inp_clg_name]
+clg_link = clg['links'][inp_clg_name]+'/'
 index = requests.get(clg_link)
 soup = BeautifulSoup(index.text, 'html.parser')
 depts_name = soup.findAll(class_='green')
@@ -56,13 +56,13 @@ inp_sub = int(input())
 lecture_notes = requests.get(f"{clg_link}/notes.php?cw={subject_links['cw'][inp_sub]}")
 soup = BeautifulSoup(lecture_notes.text, 'html.parser')
 pdf_links = soup.find_all('a', href=lambda x: x and x.startswith('files/') and x.endswith('.pdf'))
-lecture_holders = soup.find_all(class_='cont')
 notes_link = {'name':[],'link':[]}
 if not os.path.exists('SNSCourseware/'+subject_links['name'][inp_sub]):
   os.makedirs('SNSCourseware/'+subject_links['name'][inp_sub]) # Create the folder if it doesn't exist
 for link in pdf_links: # Iterate through the list of PDF links
     response = requests.get(clg_link+ link['href'])
     filename = link['href'].strip('files/')+'f'
-    with open(os.path.join('SNSCourseware/'+subject_links['name'][inp_sub],filename), 'wb') as f:
+    with open('SNSCourseware/'+subject_links['name'][inp_sub]+'/'+filename, 'wb') as f:
         f.write(response.content)
         print('Downloaded ',link['href'].strip('files/')+'f')
+        f.close()
