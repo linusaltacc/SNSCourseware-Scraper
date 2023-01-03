@@ -16,7 +16,7 @@ You need to have python3, pip and git installed to run the code.
 
 ### Demo
 
-![](https://github.com/linusaltacc/SNSCourseware-Scraper/demo.gif)
+![](demo.gif)
 
 ### Installation
 
