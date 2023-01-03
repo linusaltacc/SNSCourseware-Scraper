@@ -59,10 +59,15 @@ pdf_links = soup.find_all('a', href=lambda x: x and x.startswith('files/') and x
 notes_link = {'name':[],'link':[]}
 if not os.path.exists('SNSCourseware/'+subject_links['name'][inp_sub]):
   os.makedirs('SNSCourseware/'+subject_links['name'][inp_sub]) # Create the folder if it doesn't exist
+fnames = []
+for fname in soup.findAll("div", {"id": "filetitile"}):
+    fnames.append(fname.text.rstrip())
+i = 0
 for link in pdf_links: # Iterate through the list of PDF links
     response = requests.get(clg_link+ link['href'])
-    filename = link['href'].strip('files/')+'f'
+    filename = fnames[i]+'.pdf'
+    i+=1
     with open('SNSCourseware/'+subject_links['name'][inp_sub]+'/'+filename, 'wb') as f:
         f.write(response.content)
-        print('Downloaded ',link['href'].strip('files/')+'f')
+        print('Downloaded ',fnames[i-1]+'.pdf')
         f.close()
