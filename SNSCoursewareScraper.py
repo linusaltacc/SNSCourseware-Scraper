@@ -67,7 +67,12 @@ for link in pdf_links: # Iterate through the list of PDF links
     response = requests.get(clg_link+ link['href'])
     filename = fnames[i]+'.pdf'
     i+=1
-    with open('SNSCourseware/'+subject_links['name'][inp_sub]+'/'+filename, 'wb') as f:
+    if filename.find('/'):
+        fname = ''
+        fname = fname.join(filename.split('/'))
+        filename=fname
+    with open('SNSCourseware/'+subject_links['name'][inp_sub]+'/'+str(filename), 'wb') as f:
+        print('SNSCourseware/'+subject_links['name'][inp_sub]+'/'+str(filename))
         f.write(response.content)
         print('Downloaded ',fnames[i-1]+'.pdf')
         f.close()
