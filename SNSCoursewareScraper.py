@@ -3,13 +3,13 @@ from bs4 import BeautifulSoup
 import re
 import os
 
-main_page = requests.get('http://www.snscourseware.org/')
+main_page = requests.get('https://www.snscourseware.org/')
 soup = BeautifulSoup(main_page.text, 'html.parser')
 clg = {'name':[],'links':[]}
 for a in soup.find_all('a'):
     try:
-        if a.get('href').startswith("http://www.snscourseware.org/"):
-            clg['name'].append(a.get('href').split('http://www.snscourseware.org/')[1])
+        if a.get('href').startswith("https://www.snscourseware.org/"):
+            clg['name'].append(a.get('href').split('https://www.snscourseware.org/')[1])
             clg['links'].append(a.get('href'))
     except:
         pass
