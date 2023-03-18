@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import os
-
+import sys
 main_page = requests.get('https://www.snscourseware.org/')
 soup = BeautifulSoup(main_page.text, 'html.parser')
 clg = {'name':[],'links':[]}
@@ -13,6 +13,7 @@ for a in soup.find_all('a'):
             clg['links'].append(a.get('href'))
     except:
         pass
+print("Select the College :")
 for n in range(len(clg['name'])):
     print(f'{n}: ',clg['name'][n])
 inp_clg_name = int(input())
@@ -23,6 +24,7 @@ depts_name = soup.findAll(class_='green')
 depts = []
 for i in depts_name:
     depts.append(i.text)
+print("Select the Department :")
 for dept in range(len(depts)):
     print(f"{dept}: {depts[dept]}")
 inp_dept = int(input())
@@ -35,6 +37,7 @@ sem_link = {"name":[],"link":[]}
 for a in a_elements:
     sem_link['name'].append(a.text)
     sem_link['link'].append(a['href'])
+print("Select the Semester no. :")
 for sem in sem_link['name']:
     print(f'{sem}')
 inp_sem = int(input())
@@ -50,6 +53,7 @@ for a in stories_section.find_all('a'):
     if match:
         cw = match.group(1)
     subject_links['cw'].append(cw)
+print("Select the Subject :")
 for sub_name in range(len(subject_links['name'])):
     print(f'{sub_name}:', subject_links['name'][sub_name])
 inp_sub = int(input())
@@ -62,16 +66,17 @@ if not os.path.exists('SNSCourseware/'+subject_links['name'][inp_sub].strip()):
 fnames = []
 for fname in soup.findAll("div", {"id": "filetitile"}):
     fnames.append(fname.text.rstrip())
-i = 0
-for link in pdf_links: # Iterate through the list of PDF links
+for i, link in enumerate(pdf_links,0): # Iterate through the list of PDF links
     response = requests.get(clg_link+ link['href'])
-    filename = fnames[i]+'.pdf'
-    i+=1
-    if filename.find('/'):
-        fname = ''
-        fname = fname.join(filename.split('/'))
-        filename=fname
-    with open('SNSCourseware/'+subject_links['name'][inp_sub].strip()+'/'+str(filename), 'wb') as f:
-        f.write(response.content)
-        print('Downloaded ',fnames[i-1]+'.pdf')
-        f.close()
+    if response.status_code == 200:
+        filename = fnames[i]+'.pdf'
+        if filename.find('/'):
+            fname = ''
+            fname = fname.join(filename.split('/'))
+            filename=fname
+        with open('SNSCourseware/'+subject_links['name'][inp_sub].strip()+'/'+str(filename), 'wb') as f:
+            f.write(response.content)
+            print('Downloaded ',fnames[i]+'.pdf')
+            f.close()
+    else:
+        print('The link is broken for ',fnames[i]+'.pdf', ' with status code ',response.status_code, ' and link ',clg_link+ link['href'], '\n','Please report this to the respective department staffs. Thank you. ', file=sys.stderr)
